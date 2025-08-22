@@ -1,0 +1,201 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিসিএস তথ্য ও যোগাযোগ প্রযুক্তি</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Noto Serif Bengali font */
+        body, h1, h2, h3, h4, p, a {
+            font-family: 'Noto Serif Bengali', serif;
+            color: white;
+        }
+
+        /* Section Background */
+        .section-bg {
+            background: linear-gradient(to right, #2c2c54, #474787);
+            animation: gradientShift 15s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        /* Gradient Animation */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Colorful HR Line for Section Heading (Centered) */
+        .colorful-hr-section {
+            border: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff4757, #f1c40f, #1dd1a1);
+            margin: 1rem auto;
+            width: 50%;
+            border-radius: 2px;
+        }
+
+        /* Colorful HR Line for Card Headings (Left-Aligned) */
+        .colorful-hr-card {
+            border: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff4757, #f1c40f, #1dd1a1);
+            margin: 1rem 0;
+            width: 50%;
+            border-radius: 2px;
+        }
+
+        /* Card Hover Effect */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Button Animation */
+        .btn-anim {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            color: black;
+            font-weight: bold;
+        }
+        .btn-anim:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .btn-anim::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease;
+        }
+        .btn-anim:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 font-sans">
+    <!-- Section: বিসিএস তথ্য ও যোগাযোগ প্রযুক্তি -->
+    <section class="section-bg py-16">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center mb-4 animate__animated animate__fadeInUp">বিসিএস তথ্য ও যোগাযোগ প্রযুক্তি</h1>
+            <hr class="colorful-hr-section">
+            <p class="text-center mb-12 animate__animated animate__fadeInUp animate__delay-1s">
+                BCS এর সিলেবাস অনুযায়ী সম্পূর্ণ সিলেবাসকে ৮টি টেস্টে ভাগ করা হয়েছে এবং ৭০০+ প্রশ্ন যুক্ত করা হয়েছে। ভালো ফলাফলের জন্য টপিকগুলো পড়ার পর পরিক্ষায় অংশ নিন।
+            </p>
+            <div class="space-y-6">
+                <!-- Card 1 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ১</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: কম্পিউটার পেরিফেরালস, কম্পিউটারের অঙ্গসংগঠন, অপারেটিং সিস্টেমস</p>
+                    <a href="https://knowvaedu.github.io/icttest1/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 2 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-1s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ২</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: কম্পিউটারের ইতিহাস, কম্পিউটারের প্রকারভেদ</p>
+                    <a href="https://knowvaedu.github.io/icttest2/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 3 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-2s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৩</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: কম্পিউটার প্রোগ্রাম ও ডাটাবেইজ সিস্টেম</p>
+                    <a href="https://knowvaedu.github.io/icttest3/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 4 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-3s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৪</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: ই-কমার্স ও সেলুলার নেটওয়ার্ক</p>
+                    <a href="https://knowvaedu.github.io/icttest4/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 5 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-4s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৫</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: কম্পিউটার নেটওয়ার্ক, নিত্যদিন ব্যবহার্য তথ্যপ্রযুক্তি, স্মার্টফোন, ওয়ার্ল্ড ওয়াইড ওয়েব, ইন্টারনেট</p>
+                    <a href="https://knowvaedu.github.io/icttest5/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 6 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-5s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৬</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: নিত্য প্রয়োজনীয় কম্পিউটিং প্রযুক্তি, ক্লায়েন্ট-সার্ভার ম্যানেজমেন্ট, মোবাইল প্রযুক্তির বৈশিষ্ট্যসমূহ</p>
+                    <a href="https://knowvaedu.github.io/icttest6/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 7 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-6s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৭</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: তথ্যপ্রযুক্তির বড় প্রতিষ্ঠান ও তাদের সেবা/তথ্যসমূহ, ক্লাউড কম্পিউটিং, সোশ্যাল নেটওয়ার্কিং</p>
+                    <a href="https://knowvaedu.github.io/icttest7/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+                <!-- Card 8 -->
+                <div class="card-hover p-6 rounded-lg shadow-md animate__animated animate__fadeInUp animate__delay-7s">
+                    <h3 class="text-xl font-semibold mb-4">টেস্ট নং: ৮</h3>
+                    <hr class="colorful-hr-card">
+                    <p class="mb-4">বিষয়: Robotics ও সাইবার অপরাধ</p>
+                    <a href="https://knowvaedu.github.io/icttest8/" class="btn-anim px-4 py-2 rounded-md">পরিক্ষা দিন</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
